@@ -99,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open }) => {
         
         <List sx={{ py: 0 }}>
           <ListItem
-            button
+            button={true}
             onClick={() => handleItemClick('transmedia-org')}
             sx={{
               py: 0.5,
@@ -123,7 +123,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open }) => {
           </ListItem>
           
           <ListItem
-            button
+            button={true}
             sx={{
               py: 0.5,
               px: 1,
