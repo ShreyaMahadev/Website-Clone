@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from "next/navigation";
 
 const validationSchema = Yup.object({
   hsnCode: Yup.string().required('HSN Code is required'),
@@ -58,9 +59,15 @@ const BillingManager = () => {
     billingTerms: '',
   };
 
+  const router = useRouter();
+
   const handleSubmit = (values: any) => {
     console.log('Form submitted:', values);
     // Handle form submission here
+  };
+
+  const handleCancel = () => {
+    router.push("/general-settings");
   };
 
   return (
@@ -96,6 +103,7 @@ const BillingManager = () => {
             {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => (
               <Form>
                 <Grid container spacing={3}>
+                  {/* Row 1 */}
                   <Grid item xs={12} md={4}>
                     <TextField
                       fullWidth
@@ -110,7 +118,6 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-                  
                   <Grid item xs={12} md={4}>
                     <TextField
                       fullWidth
@@ -125,16 +132,18 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-                  
+
                   <Grid item xs={12} md={4}>
-                    <FormControl fullWidth>
+
+                    <FormControl fullWidth error={touched.dateFormat && Boolean(errors.dateFormat)}>
                       <InputLabel>Date Format</InputLabel>
                       <Select
                         name="dateFormat"
                         value={values.dateFormat}
                         label="Date Format"
                         onChange={handleChange}
-                        error={touched.dateFormat && Boolean(errors.dateFormat)}
+                        onBlur={handleBlur}
+                        required
                       >
                         <MenuItem value="dd-mm-yyyy">DD-MM-YYYY</MenuItem>
                         <MenuItem value="mm-dd-yyyy">MM-DD-YYYY</MenuItem>
@@ -142,7 +151,9 @@ const BillingManager = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-
+                  {/* End Row 1 */}
+                  
+                  {/* Row 2 */}
                   <Grid item xs={12} md={4}>
                     <TextField
                       fullWidth
@@ -158,22 +169,6 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-                  
-                  <Grid item xs={12} md={4}>
-                    <TextField
-                      fullWidth
-                      name="igst"
-                      label="IGST (%)"
-                      placeholder="IGST"
-                      type="number"
-                      value={values.igst}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.igst && Boolean(errors.igst)}
-                      helperText={touched.igst && errors.igst}
-                    />
-                  </Grid>
-                  
                   <Grid item xs={12} md={4}>
                     <TextField
                       fullWidth
@@ -189,7 +184,21 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      fullWidth
+                      name="igst"
+                      label="IGST (%)"
+                      placeholder="IGST"
+                      type="number"
+                      value={values.igst}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.igst && Boolean(errors.igst)}
+                      helperText={touched.igst && errors.igst}
+                    />
+                  </Grid>
+                  {/* Row 3 */}
                   <Grid item xs={12} md={6}>
                     <TextField
                       fullWidth
@@ -204,7 +213,6 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-
                   <Grid item xs={12} md={6}>
                     <Box sx={{ display: 'flex', gap: 4, alignItems: 'center', mt: 1 }}>
                       <Box>
@@ -221,7 +229,6 @@ const BillingManager = () => {
                           <FormControlLabel value="no" control={<Radio />} label="No" />
                         </RadioGroup>
                       </Box>
-                      
                       <Box>
                         <FormLabel component="legend" sx={{ fontWeight: 600, color: 'text.primary' }}>
                           AGR:
@@ -238,29 +245,30 @@ const BillingManager = () => {
                       </Box>
                     </Box>
                   </Grid>
-
+                  {/* Remaining fields */}
                   <Grid item xs={12}>
                     <FormLabel component="legend" sx={{ fontWeight: 600, color: 'text.primary', mb: 2 }}>
                       Payment only to 'Wallet or Division' through payment Gateway:
                     </FormLabel>
-                    <RadioGroup
-                      name="paymentGateway"
-                      value={values.paymentGateway}
-                      onChange={handleChange}
-                    >
-                      <FormControlLabel 
-                        value="wallet" 
-                        control={<Radio />} 
-                        label="Revenue Division - Wallet Only" 
-                      />
-                      <FormControlLabel 
-                        value="bank" 
-                        control={<Radio />} 
-                        label="Revenue Division - Bank Deposit" 
-                      />
-                    </RadioGroup>
+                    <Box sx={{ mt: 1 }}>
+                      <RadioGroup
+                        name="paymentGateway"
+                        value={values.paymentGateway}
+                        onChange={handleChange}
+                      >
+                        <FormControlLabel 
+                          value="wallet" 
+                          control={<Radio />} 
+                          label="Revenue Division - Wallet Only" 
+                        />
+                        <FormControlLabel 
+                          value="bank" 
+                          control={<Radio />} 
+                          label="Revenue Division - Bank Deposit" 
+                        />
+                      </RadioGroup>
+                    </Box>
                   </Grid>
-
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
@@ -277,7 +285,6 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
@@ -294,10 +301,9 @@ const BillingManager = () => {
                       required
                     />
                   </Grid>
-
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 2 }}>
-                      <Button variant="outlined" size="large">
+                      <Button variant="outlined" size="large" onClick={handleCancel}>
                         Cancel
                       </Button>
                       <Button variant="contained" type="submit" size="large">
