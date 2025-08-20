@@ -1,24 +1,29 @@
 'use client';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Paper,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import dynamic from 'next/dynamic';
 
 // Dynamically import ApexCharts to avoid SSR issues
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+// Dynamic imports — which means loading a component only when it’s needed instead of bundling it upfront.
+// Usually done when the component is heavy
+// Loads the chart only when needed (not during server build).
+//{ ssr: false } → disables server-side rendering for this component (important because ApexCharts depends on window, which doesn’t exist on the server).
 
+//In ApexCharts, the chart config is divided into two main parts: options and series
+//options :how the chart looks and behaves
+//series : actual data being plotted. It is always an array of objects.
 const MonetizationDashboard = () => {
   // Chart data for New Users & Impressions Analysis
   const newUsersData = {
-    options: {
+    options: { //options : styling, layout and behaviour
       chart: {
         type: 'area',
-        toolbar: { show: false },
+        toolbar: { show: false }, //hides the entire toolbar (no zoom/reset/download buttons).
       },
       colors: ['#8B5CF6'],
       fill: {
@@ -39,9 +44,9 @@ const MonetizationDashboard = () => {
         style: { fontSize: '12px' },
       },
     },
-    series: [
+    series: [ //actual data being plotted i.e DataSet
       {
-        name: 'New Users',
+        name: 'New Users', //Label 
         data: [1, 2, 1, 1, 1, 1],
       },
     ],
@@ -51,10 +56,10 @@ const MonetizationDashboard = () => {
     options: {
       chart: {
         type: 'bar',
-        toolbar: { show: false },
+        toolbar: { show: false }, //set of interactive tools : download, zoom-in, zoom-out
       },
       colors: ['#3B82F6'],
-      dataLabels: { enabled: true },
+      dataLabels: { enabled: true }, // shows value of each bar/point displayed directly on the chart.
       xaxis: {
         categories: ['26', '27', '28', '29', '30', '31', '01', '02', '03', '04', '05'],
       },

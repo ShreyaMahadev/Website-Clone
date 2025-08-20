@@ -20,6 +20,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from "next/navigation";
 
+// Validation schema for form validation Using Yup
 const validationSchema = Yup.object({
   hsnCode: Yup.string().required('HSN Code is required'),
   sacCode: Yup.string().required('SAC Code is required'),
@@ -43,6 +44,7 @@ const validationSchema = Yup.object({
   billingTerms: Yup.string().required('Billing Terms and Conditions is required'),
 });
 
+// Initial values for the form
 const BillingManager = () => {
   const initialValues = {
     hsnCode: '',
@@ -61,11 +63,12 @@ const BillingManager = () => {
 
   const router = useRouter();
 
+  // Handle form submission here
   const handleSubmit = (values: any) => {
     console.log('Form submitted:', values);
-    // Handle form submission here
   };
 
+  //Redirect to general settings when clicked in Cancel button
   const handleCancel = () => {
     router.push("/general-settings");
   };
